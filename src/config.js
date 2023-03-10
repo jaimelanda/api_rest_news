@@ -1,3 +1,2 @@
-
-import { config } from "dotenv"
-export const SECRET='news-api';
+import { config } from "dotenv";
+export const SECRET = "news-api";

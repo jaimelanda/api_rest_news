@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build":"babel src --out-dir build",
+    "build": "babel src --out-dir build",
     "dev": "nodemon  src/index.js --exec babel-node",
-    "start":"node build/index.js"
+    "start": "node build/index.js"
   },
   "keywords": [],
   "author": "Jaime Landa",
@@ -19,7 +19,8 @@
     "helmet": "^6.0.1",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.0",

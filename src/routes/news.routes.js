@@ -9,7 +9,7 @@ const upload = multer({ dest: "uploads/" });
 
 router.post(
   "/",
-  [authJwt.verifyToken, authJwt.isAdmin, upload.single("img")],
+  [authJwt.verifyToken, authJwt.isAdmin, upload.single("imgURL")],
   newsController.createNews
 );
 router.get("/", newsController.getNews);

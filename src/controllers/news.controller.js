@@ -5,18 +5,18 @@ import { extname } from "path";
 
 export const createNews = async (req, res) => {
   try {
-    const { title, description, published } = req.body;
+    const { title,summary, description, published } = req.body;
 
     const { originalname, filename, path } = req.file;
     const extension = extname(originalname);
     renameSync(path, path + extension);
-    const imgURL = filename + extension;
+    const img = filename + extension;
 
-    const newNews = new News({ title, description, published, imgURL });
+    const newNews = new News({ title,summary, description, published, img });
     const newsSaved = await newNews.save();
     res.status(201).json(newsSaved);
   } catch (error) {
-    console.log('mostrando algun error',error)
+    console.log("mostrando algun error", error);
   }
 };
 export const getNews = async (req, res) => {

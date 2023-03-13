@@ -7,9 +7,10 @@ const newsSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    summary: String,
     description: String,
     published: String,
-    imgURL: String,
+    img: String,
   },
   {
     timestamps: true,

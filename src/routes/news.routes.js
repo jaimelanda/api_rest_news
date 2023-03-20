@@ -1,15 +1,25 @@
 import { Router } from "express";
 import multer from "multer";
-const router = Router();
 
 import * as newsController from "../controllers/news.controller";
 import { authJwt } from "../middlewares";
 
-const upload = multer({ dest: "uploads/" });
+const router = Router();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 router.post(
   "/",
-  [authJwt.verifyToken, authJwt.isAdmin, upload.single("imgURL")],
+  [authJwt.verifyToken, authJwt.isAdmin, upload.array("images")],
   newsController.createNews
 );
 router.get("/", newsController.getNews);

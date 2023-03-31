@@ -27,6 +27,7 @@ router.get("/:newsId", newsController.getNewsById);
 router.put(
   "/:newsId",
   [authJwt.verifyToken, authJwt.isAdmin],
+  upload.array("images"),
   newsController.updateNewsById
 );
 router.delete(

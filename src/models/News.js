@@ -9,7 +9,7 @@ const newsSchema = new mongoose.Schema(
     },
     summary: String,
     description: String,
-    published: String,
+    published: Boolean,
     img: [String],
   },
   {

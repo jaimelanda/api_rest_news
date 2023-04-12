@@ -5,6 +5,7 @@ import { createRoles } from "./libs/initialSetup";
 import newsRoutes from "./routes/news.routes";
 import authRoutes from "./routes/auth.routes";
 import userRouter from "./routes/user.routes";
+import contactUsRouter from "./routes/contactUs.routes";
 
 const app = express();
 createRoles();
@@ -16,7 +17,7 @@ app.use("/uploads", express.static("uploads"));
 app.get("/", (req, res) => {
   res.json({
     name: "jaime",
-    author: "autorjaiem",
+    author: "autorjaime",
     description: "description",
   });
 });
@@ -24,5 +25,6 @@ app.get("/", (req, res) => {
 app.use("/api/news", newsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRouter);
+app.use("/api/contactus", contactUsRouter);
 
 export default app;

@@ -1,8 +1,8 @@
 import {Router} from "express";
 import multer from "multer";
 
-import * as newsController from "../controllers/news.controller";
-import {authJwt} from "../middlewares";
+import * as newsController from "../controllers/news.controller.js";
+import * as authJwt from "../middlewares/authJwt.js";
 
 const router = Router();
 

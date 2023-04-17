@@ -1,4 +1,4 @@
-import News from "../models/News";
+import News from "../models/News.js";
 import fs from "fs";
 import path from "path";
 
@@ -38,31 +38,33 @@ export const updateNewsById = async (req, res) => {
         updatedNews.summary = req.body.summary;
         updatedNews.description = req.body.description;
         updatedNews.published = req.body.published;
-        const imgupload =req.files.map((file) => file.filename);
+        const imgUpload =req.files.map((file) => file.filename);
+
         const imgUpdate = req.body.img.split(",")
+
+
         const imgPermanent = []
+
         updatedNews.img.forEach(im=>{
             if(!imgUpdate.some(i=>i===im)){
-                console.log("eliminando", im)
                 const pathImg = path.join(__dirname, '..',"..", 'uploads', im);
                 fs.unlink(pathImg , (err) => {
                     if (err) {
-                        console.log("error deleteing file", err)
+                        console.log("error deleting file", err)
                     }
                 });
 
             }else{
-                console.log("agreadno", im)
                 imgPermanent.push(im)
             }
         })
         console.log("updatedNews.img", updatedNews.img)
-        updatedNews.img = [...imgPermanent,...imgupload]
+        updatedNews.img = [...imgPermanent,...imgUpload]
         console.log("updatedNews.img", updatedNews.img)
         const savedNews = await updatedNews.save();
         res.status(200).json(savedNews);
     } catch (error) {
-        console.log("mostrando algun error", error);
+        console.log("mostrando algún error", error);
 
         res.status(500).json({message: "Error interno del servidor"});
     }

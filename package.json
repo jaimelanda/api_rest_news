@@ -9,6 +9,7 @@
     "start": "node build/index.js"
   },
   "keywords": [],
+  "type": "module",
   "author": "Jaime Landa",
   "license": "ISC",
   "dependencies": {

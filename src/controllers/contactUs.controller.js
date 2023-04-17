@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
 
 const RECAPTCHA_SECRET_KEY = '6Lc2_XYlAAAAAOSI_46Md-SzyHQeILMa5vDGl2-w';
 

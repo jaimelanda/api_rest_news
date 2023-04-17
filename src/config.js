@@ -1,2 +1,2 @@
-import { config } from "dotenv";
-export const SECRET = "news-api";
+const SECRET = "news-api";
+export default SECRET;

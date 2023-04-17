@@ -1,11 +1,11 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import { createRoles } from "./libs/initialSetup";
-import newsRoutes from "./routes/news.routes";
-import authRoutes from "./routes/auth.routes";
-import userRouter from "./routes/user.routes";
-import contactUsRouter from "./routes/contactUs.routes";
+import { createRoles } from "./libs/initialSetup.js";
+import newsRoutes from "./routes/news.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import userRouter from "./routes/user.routes.js";
+import contactUsRouter from "./routes/contactUs.routes.js";
 
 const app = express();
 createRoles();

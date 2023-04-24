@@ -19,8 +19,7 @@ export const getNews = async (req, res) => {
     res.status(200).json(news);
 };
 export const getNewsById = async (req, res) => {
-    console.log("res newsId", res.newsId)
-        const news = await News.findById(req.params.newsId).catch(error=>{
+    const news = await News.findById(req.params.newsId).catch(error => {
         console.log("error")
         return {error}
     });
@@ -29,40 +28,31 @@ export const getNewsById = async (req, res) => {
 
 export const updateNewsById = async (req, res) => {
     try {
-        const updatedNews = await News.findById(req.params.newsId);
-
-        if (!updatedNews) {
-            return res.status(404).json({message: "Noticia no encontrada"});
+        const {newsId} = req.params;
+        let newsDB = await News.findById(newsId);
+        if (!newsDB) {
+            return res.status(404).json({message: "noticia no encontrada"});
         }
-        updatedNews.title = req.body.title;
-        updatedNews.summary = req.body.summary;
-        updatedNews.description = req.body.description;
-        updatedNews.published = req.body.published;
-        const imgUpload =req.files.map((file) => file.filename);
-
-        const imgUpdate = req.body.img.split(",")
-
-
-        const imgPermanent = []
-
-        updatedNews.img.forEach(im=>{
-            if(!imgUpdate.some(i=>i===im)){
-                const pathImg = path.join(__dirname, '..',"..", 'uploads', im);
-                fs.unlink(pathImg , (err) => {
-                    if (err) {
-                        console.log("error deleting file", err)
-                    }
-                });
-
-            }else{
-                imgPermanent.push(im)
+        const noticia = req.body;
+        const urls = noticia.urls || []
+        delete noticia.urls;
+        Object.assign(newsDB, noticia)
+        const images = []
+        const imagesDB = newsDB.img
+        for (const image of imagesDB) {
+            if (urls.includes(`/uploads/${image}`)) {
+                images.push(image)
+            } else {
+                fs.unlinkSync(`uploads/${image}`)
             }
-        })
-        console.log("updatedNews.img", updatedNews.img)
-        updatedNews.img = [...imgPermanent,...imgUpload]
-        console.log("updatedNews.img", updatedNews.img)
-        const savedNews = await updatedNews.save();
-        res.status(200).json(savedNews);
+        }
+        for (const image of req.files.map((file) => file.filename)) {
+            images.push(image)
+        }
+        newsDB.img = images;
+        const newsSaved = await newsDB.save()
+
+        res.status(200).json(newsSaved);
     } catch (error) {
         console.log("mostrando algún error", error);
 
@@ -71,14 +61,14 @@ export const updateNewsById = async (req, res) => {
 };
 
 export const deleteNews = async (req, res) => {
-    const deletedNews = await News.findByIdAndDelete(req.params.newsId);
+    await News.findByIdAndDelete(req.params.newsId);
     res.status(204).json();
 };
 
-export const deleteSource = (req,res)=>{
-    console.log("req.params.path",req.params.path)
+export const deleteSource = (req, res) => {
+    console.log("req.params.path", req.params.path)
     try {
-        fs.unlink(req.params.path , (err) => {
+        fs.unlink(req.params.path, (err) => {
             if (err) {
                 throw err;
             }
@@ -87,7 +77,7 @@ export const deleteSource = (req,res)=>{
             res.status(200).json();
         });
 
-    }catch (error){
+    } catch (error) {
         console.log(error)
         res.status(500).json()
     }

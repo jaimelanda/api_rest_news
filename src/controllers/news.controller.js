@@ -40,7 +40,7 @@ export const updateNewsById = async (req, res) => {
         const images = []
         const imagesDB = newsDB.img
         for (const image of imagesDB) {
-            if (urls.includes(`/uploads/${image}`)) {
+            if (urls.includes(image)){
                 images.push(image)
             } else {
                 fs.unlinkSync(`uploads/${image}`)
@@ -61,24 +61,21 @@ export const updateNewsById = async (req, res) => {
 };
 
 export const deleteNews = async (req, res) => {
-    await News.findByIdAndDelete(req.params.newsId);
-    res.status(204).json();
+    try {
+        const {newsId} = req.params;
+        let newsDB = await News.findById(newsId);
+        if (!newsDB) {
+            return res.status(404).json({message: "noticia no encontrada"});
+        }
+       newsDB.img.forEach((image)=>{
+           fs.unlinkSync(`uploads/${image}`)
+       })
+
+        await News.findByIdAndDelete(newsId);
+        res.status(204).json();
+    } catch (error){
+        console.error(error)
+        return res.status(500).json({message:"Error del servidor"})
+    }
 };
 
-export const deleteSource = (req, res) => {
-    console.log("req.params.path", req.params.path)
-    try {
-        fs.unlink(req.params.path, (err) => {
-            if (err) {
-                throw err;
-            }
-
-            console.log("Delete File successfully.");
-            res.status(200).json();
-        });
-
-    } catch (error) {
-        console.log(error)
-        res.status(500).json()
-    }
-}

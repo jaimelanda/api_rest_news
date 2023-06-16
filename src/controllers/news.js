@@ -1,12 +1,13 @@
-import News from "../models/News.js";
 import fs from "fs";
-import path from "path";
+import News from "../models/News.js";
+
+const {UPLOADS_DIR} = process.env
 
 export const createNews = async (req, res) => {
+    const {title, summary, description, published} = req.body;
     try {
-        const {title, summary, description, published} = req.body;
-        const img = req.files.map((file) => file.filename);
-        const newNews = new News({title, summary, description, published, img});
+        const imgs = req.files.map((file) => file.filename);
+        const newNews = new News({title, summary, description, published, img: imgs});
         const newsSaved = await newNews.save();
         res.status(201).json(newsSaved);
     } catch (error) {
@@ -19,38 +20,39 @@ export const getNews = async (req, res) => {
     res.status(200).json(news);
 };
 export const getNewsById = async (req, res) => {
-    const news = await News.findById(req.params.newsId).catch(error => {
-        console.log("error")
-        return {error}
+    const {newsId} = req.params;
+    const news = await News.findById(newsId).catch((error) => {
+        console.log("error");
+        return {error};
     });
     res.status(200).json(news);
 };
 
 export const updateNewsById = async (req, res) => {
+    const {newsId} = req.params;
     try {
-        const {newsId} = req.params;
         let newsDB = await News.findById(newsId);
         if (!newsDB) {
             return res.status(404).json({message: "noticia no encontrada"});
         }
         const noticia = req.body;
-        const urls = noticia.urls || []
+        const urls = noticia.urls || [];
         delete noticia.urls;
-        Object.assign(newsDB, noticia)
-        const images = []
-        const imagesDB = newsDB.img
+        Object.assign(newsDB, noticia);
+        const images = [];
+        const imagesDB = newsDB.img;
         for (const image of imagesDB) {
-            if (urls.includes(image)){
-                images.push(image)
+            if (urls.includes(image)) {
+                images.push(image);
             } else {
-                fs.unlinkSync(`uploads/${image}`)
+                fs.unlinkSync(`${UPLOADS_DIR}/${image}`);
             }
         }
         for (const image of req.files.map((file) => file.filename)) {
-            images.push(image)
+            images.push(image);
         }
         newsDB.img = images;
-        const newsSaved = await newsDB.save()
+        const newsSaved = await newsDB.save();
 
         res.status(200).json(newsSaved);
     } catch (error) {
@@ -61,21 +63,21 @@ export const updateNewsById = async (req, res) => {
 };
 
 export const deleteNews = async (req, res) => {
+    const {newsId} = req.params;
+
     try {
-        const {newsId} = req.params;
         let newsDB = await News.findById(newsId);
         if (!newsDB) {
             return res.status(404).json({message: "noticia no encontrada"});
         }
-       newsDB.img.forEach((image)=>{
-           fs.unlinkSync(`uploads/${image}`)
-       })
+        newsDB.img.forEach((image) => {
+            fs.unlinkSync(`${UPLOADS_DIR}/${image}`);
+        });
 
         await News.findByIdAndDelete(newsId);
         res.status(204).json();
-    } catch (error){
-        console.error(error)
-        return res.status(500).json({message:"Error del servidor"})
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({message: "Error del servidor"});
     }
 };
-

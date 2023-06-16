@@ -1,5 +1,5 @@
 {
-  "name": "cursoapirest",
+  "name": "@api_news/jaime",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,31 +9,26 @@
     "start": "node build/index.js"
   },
   "keywords": [],
-  "type": "module",
   "author": "Jaime Landa",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "google-recaptcha": "^1.1.0",
-    "helmet": "^6.0.1",
-    "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.1",
-    "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.1",
-    "querystring": "^0.2.1",
-    "react-google-recaptcha": "^2.1.0",
-    "request": "^2.88.2"
+    "bcryptjs": "2.4.3",
+    "cors": "2.8.5",
+    "dotenv": "16.1.4",
+    "express": "4.18.2",
+    "express-async-errors": "3.1.1",
+    "jsonwebtoken": "9.0.0",
+    "mongoose": "7.2.4",
+    "morgan": "1.10.0",
+    "multer": "1.4.5-lts.1",
+    "nodemailer": "6.9.3"
   },
   "devDependencies": {
-    "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.0",
-    "@babel/node": "^7.20.7",
-    "@babel/preset-env": "^7.20.2",
-    "nodemon": "^2.0.21"
+    "@babel/cli": "7.22.5",
+    "@babel/core": "7.22.5",
+    "@babel/node": "7.22.5",
+    "@babel/preset-env": "7.22.5",
+    "nodemon": "2.0.22",
+    "prettier": "2.8.8"
   }
 }

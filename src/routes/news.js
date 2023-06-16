@@ -1,40 +1,45 @@
 import {Router} from "express";
 import multer from "multer";
 
-import * as newsController from "../controllers/news.controller.js";
-import * as authJwt from "../middlewares/authJwt.js";
+import * as newsController from "../controllers/news.js";
+import * as authMiddleware from "../middlewares/auth"
 
 const router = Router();
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "uploads/");
+    destination (req, file, cb) {
+        cb(null, process.env.UPLOADS_DIR);
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + "-" + file.originalname);
     },
 });
 
-const upload = multer({storage});
-
+const upload = multer({
+  storage: storage,
+  limits: { fieldSize: 25 * 1024 * 1024 },
+});
 router.post(
     "/",
-    [authJwt.verifyToken, authJwt.isAdmin, upload.array("images")],
+    [authMiddleware.verifyToken, authMiddleware.isAdmin],
+    upload.array("images"),
     newsController.createNews
 );
 router.get("/", newsController.getNews);
+
 router.get("/:newsId", newsController.getNewsById);
+
 router.put(
     "/:newsId",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authMiddleware.verifyToken, authMiddleware.isAdmin],
     upload.array("images"),
     newsController.updateNewsById
 );
+
 router.delete(
     "/:newsId",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authMiddleware.verifyToken, authMiddleware.isAdmin],
     newsController.deleteNews
 );
-
 
 export default router;

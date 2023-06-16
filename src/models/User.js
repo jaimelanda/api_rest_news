@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
 
 const userSchema = new Schema(
   {
@@ -28,12 +28,12 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.statics.encryptPassword = async (password) => {
-  const salt = await bcrypt.genSalt(8);
-  return await bcrypt.hash(password, salt);
+userSchema.statics.encryptPassword =  (password) => {
+  const salt =  bcrypt.genSaltSync(8);
+  return  bcrypt.hash(password, salt);
 };
-userSchema.statics.comparePassword = async (password, receivedPassword) => {
-  return await bcrypt.compare(password, receivedPassword);
+userSchema.statics.comparePassword =  (password, receivedPassword) => {
+  return  bcrypt.compareSync(password, receivedPassword);
 };
 
 export default model("User", userSchema);
